@@ -74,7 +74,7 @@ else()
 
  endif()
 
-FIND_LIBRARY(FORTRAN_LIBRARIES NAMES gfortran HINTS /usr/lib/gcc/x86_64-linux-gnu/7)
+FIND_LIBRARY(FORTRAN_LIBRARIES NAMES gfortran HINTS /usr/lib/gcc/x86_64-linux-gnu/5)
 include_directories(arpack++/include)
 
 set (CMAKE_CXX_STANDARD 11)
