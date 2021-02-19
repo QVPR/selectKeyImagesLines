@@ -122,7 +122,7 @@ function [M, inliers] = ransac(x, fittingfn, distfn, degenfn, s, t, feedback, ..
     if nargin < 8; maxDataTrials = 100; end; 
     if nargin < 7; feedback = 0;        end;
     
-    [rows, npts] = size(x);                 
+    [rows, npts] = size(x);  
     
     p = 0.99;         % Desired probability of choosing at least one sample
                       % free from outliers
@@ -144,7 +144,7 @@ function [M, inliers] = ransac(x, fittingfn, distfn, degenfn, s, t, feedback, ..
             % (If you do not have the statistics toolbox, or are using Octave,
             % use the function RANDOMSAMPLE from my webpage)
 	    if Octave | ~exist('randsample.m')
-		ind = randomsample(npts, s);
+		ind = randSample(npts, s);
 	    else
 		ind = randsample(npts, s);
 	    end

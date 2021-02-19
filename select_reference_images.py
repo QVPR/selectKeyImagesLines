@@ -19,6 +19,25 @@ def copy_file(file,destination):
 def get_image_file_number(image_name):
 	return image_name[len('frame'):].split('.')[0]
 
+def get_matched_lines_in_3v(linesmatch,matchindex,lines):
+	npts = matchindex.shape[0]
+	matchedlines = np.array(2,2*npts,3)
+
+	matchedlines[0,0:2:2*npts,0] = linesmatch[matchindex[:,0],0].T
+	matchedlines[1,0:2:2*npts,0] = linesmatch[matchindex[:,0],1].T
+	matchedlines[0,1:2:2*npts,0] = linesmatch[matchindex[:,0],2].T
+	matchedlines[1,1:2:2*npts,0] = linesmatch[matchindex[:,0],3].T
+
+	matchedlines[0,0:2:2*npts,1] = linesmatch[matchindex[:,1],4].T
+	matchedlines[1,0:2:2*npts,1] = linesmatch[matchindex[:,1],5].T
+	matchedlines[0,1:2:2*npts,1] = linesmatch[matchindex[:,1],6].T
+	matchedlines[1,1:2:2*npts,1] = linesmatch[matchindex[:,1],6].T
+
+	matchedlines[0,0:2:2*npts,2] = lines[matchindex[:,1],0].T
+	matchedlines[1,0:2:2*npts,2] = lines[matchindex[:,1],1].T
+	matchedlines[0,1:2:2*npts,2] = lines[matchindex[:,1],2].T
+	matchedlines[1,1:2:2*npts,2] = lines[matchindex[:,1],3].T
+
 base_folder = os.path.expanduser('~/linenav_officetest/')
 output_directory = base_folder + 'ref_imgs/'
 if not os.path.exists(output_directory):
@@ -41,7 +60,7 @@ for i, image_name in enumerate(image_list):
 	if ct == 1:
 		linest = lines
 		pr = 1
-		linesmatch = []
+		lines_match = []
 
 		np.savetxt('lines_l.tmp', lines)
 		copy_file(image_name, output_directory)
@@ -72,9 +91,14 @@ for i, image_name in enumerate(image_list):
 
 			if ct > 2:
 				# finish this!
-				pass
+				try:
+					matched_lines = get_matched_lines_in_3v(lines_match, match_index, lines)
+					# [TT,scorecheck,validindex] = calLineReconsError(matched_lines)
+				except:
+					ct = 0
+					continue
 
-			linesmatch.append(np.hstack([lines_prev[:,:4],linest[:,:4]]))
+			lines_match.append(np.hstack([lines_prev[:,:4],linest[:,:4]]))
 
 image = cv2.imread(base_folder + image_list[-1], cv2.IMREAD_GRAYSCALE)
 image_number = get_image_file_number(image_list[-1])

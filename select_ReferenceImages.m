@@ -33,7 +33,7 @@ addpath('./linematching');
 % folder that contains all the images in png
 % path of basefolder. 
 %%
- bf = '../roboroom';
+ bf = '../../linenav_officetest';
  
  %% threshold .. no of miminum match lines
  thres = 20;
@@ -83,7 +83,7 @@ for j=1:length(imList)
            save('lines_l.tmp', 'lines', '-ascii', '-tabs');
            system(['cp ',im,' ',KFD]);
 %            save([KFD,'/kl_',im(end-7:end-3),'txt'],'lines', '-ascii', '-tabs');
-            dlmwrite([KFD,'/kl_',im(end-8:end-3),'txt'],lines,'delimiter','\t','precision','%.12f');
+            dlmwrite([KFD,'/kl_',im(end-7:end-3),'txt'],lines,'delimiter','\t','precision','%.12f');
            linesmatch =[];
            matchedlines = [];
            indxmatch=[];
@@ -148,6 +148,7 @@ for j=1:length(imList)
         end
         
        end
+       fflush(stdout())
 end
 
 %% add last image of sequence as ref. image
